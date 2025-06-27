@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1010798285867",
+    "project_id": "sembako-store",
+    "storage_bucket": "sembako-store.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010798285867:android:7314399e9ded95e2dcc66e",
+        "android_client_info": {
+          "package_name": "com.example.project_uas_ecomerce"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7TNH_PPpzLZ2aNMKwqvV2TioFJMPCvgE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
