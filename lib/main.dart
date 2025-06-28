@@ -1,12 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:project_uas_ecomerce/homePage.dart';
+import 'package:project_uas_ecomerce/theme/container_decoration.dart';
+import 'package:project_uas_ecomerce/views/cart_page.dart';
+import 'package:project_uas_ecomerce/views/homePage.dart';
 import 'firebase_options.dart';
 import 'package:email_validator/email_validator.dart';
-
-
-
+// theme
+import 'theme/input_decoration.dart';
+import 'theme/button_styles.dart';
+import 'widgets/custom_textfield.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +24,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Cafe Menu',
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: AuthChecker(),
+        routes: {
+      '/cart': (context) => const CartPage(), // kita buat halaman ini setelah ini
+      },
     );
   }
 }
@@ -36,8 +42,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool _isLoading = false;
+  bool _obscurePassword = true;
 
-  // Fungsi login yang sudah di-upgrade
   void _login() async {
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       _showErrorDialog('Email dan password harus diisi');
@@ -50,10 +56,6 @@ class _LoginScreenState extends State<LoginScreen> {
       await _auth.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
       );
     } on FirebaseAuthException catch (e) {
       String message = _handleFirebaseError(e);
@@ -97,125 +99,79 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: null, // Menghilangkan appBar default
+      appBar: null,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16),
-          child: _buildLoginForm4(), // Memanggil template yang sudah di-styling
+          child: _buildLoginForm(),
         ),
       ),
     );
   }
 
-  // Template yang telah dimodifikasi dengan fungsionalitas Firebase
-  Widget _buildLoginForm4() {
+  Widget _buildLoginForm() {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 3,
-            blurRadius: 10,
-            offset: Offset(0, 5),
-          ),
-        ],
-      ),
+      decoration: formContainerDecoration(),
       constraints: BoxConstraints(maxWidth: 500),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Header Section
-          Column(
-            children: [
-              Icon(Icons.account_circle, size: 60, color: Color(0xFF3A5A78)),
-              SizedBox(height: 15),
-              Text('Welcome Back', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-              SizedBox(height: 5),
-              Text('Sign in to continue', style: TextStyle(color: Colors.grey[600])),
-            ],
-          ),
-          
+          Icon(Icons.account_circle, size: 60, color: Color(0xFF3A5A78)),
+          SizedBox(height: 15),
+          Text('Welcome Back', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+          SizedBox(height: 5),
+          Text('Sign in to continue', style: TextStyle(color: Colors.grey[600])),
           SizedBox(height: 30),
-          
-          // Input Fields dengan controller
-          Column(
-            children: [
-              TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                  hintText: 'Email Address',
-                ),
-                keyboardType: TextInputType.emailAddress,
-              ),
-              SizedBox(height: 15),
-              TextField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                  hintText: 'Password',
-                ),
-              ),
-            ],
-          ),
 
+          CustomTextField(
+            controller: _emailController,
+            hintText: 'Email Address',
+            prefixIcon: Icon(Icons.email),
+            keyboardType: TextInputType.emailAddress,
+          ),
+          SizedBox(height: 15),
+          CustomTextField(
+            controller: _passwordController,
+            hintText: 'Password',
+            prefixIcon: Icon(Icons.lock),
+            obscureText: _obscurePassword,
+            toggleVisibility: () => setState(() => _obscurePassword = !_obscurePassword),
+          ),
           SizedBox(height: 20),
-          
-          // Login Button dengan loading state
+
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               onPressed: _isLoading ? null : _login,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF4A90E2),
-                padding: EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
+              style: primaryButtonStyle(),
               child: _isLoading
                   ? CircularProgressIndicator(color: Colors.white)
-                  : Text('LOGIN', style: TextStyle(fontSize: 16)),
+                  : Text('LOGIN', style: TextStyle(color: Colors.white)),
             ),
           ),
-          
+
           SizedBox(height: 25),
-          
-          // Footer Links
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    // Tambahkan logika forgot password di sini
-                  },
-                  child: Text('Forgot Password?', style: TextStyle(color: Colors.blue)),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
-                  },
-                  child: Text('Create Account', style: TextStyle(color: Colors.blue)),
-                ),
-              ],
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(
+                onPressed: () {},
+                child: Text('Forgot Password?', style: TextStyle(color: Colors.blue)),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
+                },
+                child: Text('Create Account', style: TextStyle(color: Colors.blue)),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 }
-
 class RegisterPage extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -240,12 +196,10 @@ class _RegisterPageState extends State<RegisterPage> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-      
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => LoginScreen()),
       );
-      
     } on FirebaseAuthException catch (e) {
       _handleError(e);
     } finally {
@@ -254,8 +208,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   bool _validateInputs() {
-    if (_emailController.text.isEmpty || 
-        _passwordController.text.isEmpty || 
+    if (_emailController.text.isEmpty ||
+        _passwordController.text.isEmpty ||
         _confirmPasswordController.text.isEmpty) {
       _showErrorDialog('Semua field harus diisi');
       return false;
@@ -328,18 +282,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _buildRegisterForm() {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 40, 20, 30),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 3,
-            blurRadius: 10,
-            offset: Offset(0, 5),
-          ),
-        ],
-      ),
+      decoration: formContainerDecoration(),
       constraints: BoxConstraints(maxWidth: 500),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -367,22 +310,17 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ],
           ),
-          
+
           SizedBox(height: 30),
-          
+
           // Input Fields
           Column(
             children: [
               TextField(
                 controller: _emailController,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                decoration: customInputDecoration(
                   hintText: 'Email Address',
                   prefixIcon: Icon(Icons.email),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Color(0xFF4A90E2)),
-                  ),
                 ),
                 keyboardType: TextInputType.emailAddress,
               ),
@@ -390,8 +328,7 @@ class _RegisterPageState extends State<RegisterPage> {
               TextField(
                 controller: _passwordController,
                 obscureText: _obscurePassword,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                decoration: customInputDecoration(
                   hintText: 'Password',
                   prefixIcon: Icon(Icons.lock),
                   suffixIcon: IconButton(
@@ -402,18 +339,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       setState(() => _obscurePassword = !_obscurePassword);
                     },
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Color(0xFF4A90E2)),
-                  ),
                 ),
               ),
               SizedBox(height: 15),
               TextField(
                 controller: _confirmPasswordController,
                 obscureText: _obscureConfirmPassword,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                decoration: customInputDecoration(
                   hintText: 'Confirm Password',
                   prefixIcon: Icon(Icons.lock_outline),
                   suffixIcon: IconButton(
@@ -424,10 +356,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       setState(() => _obscureConfirmPassword = !_obscureConfirmPassword);
                     },
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Color(0xFF4A90E2)),
-                  ),
                 ),
                 onSubmitted: (_) => _register(),
               ),
@@ -435,19 +363,13 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
 
           SizedBox(height: 20),
-          
+
           // Register Button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               onPressed: _isLoading ? null : _register,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF4A90E2),
-                padding: EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
+              style: primaryButtonStyle(),
               child: _isLoading
                   ? SizedBox(
                       height: 20,
@@ -460,9 +382,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   : Text('REGISTER', style: TextStyle(color: Colors.white)),
             ),
           ),
-          
+
           SizedBox(height: 25),
-          
+
           // Login Link
           TextButton(
             onPressed: () {
@@ -493,3 +415,20 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
+class AuthChecker extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasData) {
+          return HomePage(); 
+        } else {
+          return LoginScreen();
+        }
+      },
+    );
+  }
+}
