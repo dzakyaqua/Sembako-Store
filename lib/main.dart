@@ -23,6 +23,8 @@ class MyApp extends StatelessWidget {
       home: AuthChecker(),
         routes: {
       '/cart': (context) => const CartPage(), // kita buat halaman ini setelah ini
+      '/home': (context) => const HomePage(),
+      '/login': (context) => const LoginScreen(),
       },
     );
   }

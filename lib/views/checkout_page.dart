@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:project_uas_ecomerce/widgets/base_scaffold.dart';
+import 'package:project_uas_ecomerce/widgets/navbar.dart';
 
 class CheckoutPage extends StatelessWidget {
   const CheckoutPage({super.key});
@@ -57,26 +59,48 @@ class CheckoutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Konfirmasi Checkout')),
+      drawer: const CustomDrawer(),
+      appBar: const MyNavbar(title: 'Sembako Store'), // Sidebar
       body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            const Text(
-              'Apakah kamu yakin ingin melakukan checkout?',
-              style: TextStyle(fontSize: 18),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 30),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.check_circle),
-              label: const Text('Checkout Sekarang'),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-              onPressed: () => _checkout(context),
-            )
-          ],
+  padding: const EdgeInsets.all(24),
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      const Text(
+        'Apakah kamu yakin ingin melakukan checkout?',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
         ),
+        textAlign: TextAlign.center,
       ),
+      const SizedBox(height: 40),
+      ElevatedButton.icon(
+        icon: const Icon(Icons.check_circle, color: Colors.white),
+        label: const Text(
+          'Checkout Sekarang',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color(0xFFFF6F00),
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 4,
+        ),
+        onPressed: () => _checkout(context),
+      ),
+    ],
+  ),
+),
+
     );
   }
 }
