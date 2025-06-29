@@ -110,64 +110,66 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildLoginForm() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
-      decoration: formContainerDecoration(),
-      constraints: BoxConstraints(maxWidth: 500),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.account_circle, size: 60, color: Color(0xFF3A5A78)),
-          SizedBox(height: 15),
-          Text('Welcome Back', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          SizedBox(height: 5),
-          Text('Sign in to continue', style: TextStyle(color: Colors.grey[600])),
-          SizedBox(height: 30),
+      return Center(
+        child:Container(
+        padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+        decoration: formContainerDecoration(),
+        constraints: BoxConstraints(maxWidth: 500),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.account_circle, size: 60, color: Color(0xFF3A5A78)),
+            SizedBox(height: 15),
+            Text('Welcome Back', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            SizedBox(height: 5),
+            Text('Sign in to continue', style: TextStyle(color: Colors.grey[600])),
+            SizedBox(height: 30),
 
-          CustomTextField(
-            controller: _emailController,
-            hintText: 'Email Address',
-            prefixIcon: Icon(Icons.email),
-            keyboardType: TextInputType.emailAddress,
-          ),
-          SizedBox(height: 15),
-          CustomTextField(
-            controller: _passwordController,
-            hintText: 'Password',
-            prefixIcon: Icon(Icons.lock),
-            obscureText: _obscurePassword,
-            toggleVisibility: () => setState(() => _obscurePassword = !_obscurePassword),
-          ),
-          SizedBox(height: 20),
-
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _isLoading ? null : _login,
-              style: primaryButtonStyle(),
-              child: _isLoading
-                  ? CircularProgressIndicator(color: Colors.white)
-                  : Text('LOGIN', style: TextStyle(color: Colors.white)),
+            CustomTextField(
+              controller: _emailController,
+              hintText: 'Email Address',
+              prefixIcon: Icon(Icons.email),
+              keyboardType: TextInputType.emailAddress,
             ),
-          ),
+            SizedBox(height: 15),
+            CustomTextField(
+              controller: _passwordController,
+              hintText: 'Password',
+              prefixIcon: Icon(Icons.lock),
+              obscureText: _obscurePassword,
+              toggleVisibility: () => setState(() => _obscurePassword = !_obscurePassword),
+            ),
+            SizedBox(height: 20),
 
-          SizedBox(height: 25),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TextButton(
-                onPressed: () {},
-                child: Text('Forgot Password?', style: TextStyle(color: Colors.blue)),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _isLoading ? null : _login,
+                style: primaryButtonStyle(),
+                child: _isLoading
+                    ? CircularProgressIndicator(color: Colors.white)
+                    : Text('LOGIN', style: TextStyle(color: Colors.white)),
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
-                },
-                child: Text('Create Account', style: TextStyle(color: Colors.blue)),
-              ),
-            ],
-          ),
-        ],
+            ),
+
+            SizedBox(height: 25),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () {},
+                  child: Text('Forgot Password?', style: TextStyle(color: Colors.blue)),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
+                  },
+                  child: Text('Create Account', style: TextStyle(color: Colors.blue)),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
