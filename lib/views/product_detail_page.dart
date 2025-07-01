@@ -66,7 +66,7 @@ class ProductDetailPage extends StatelessWidget {
                       "Rp ${product.harga}",
                       style: const TextStyle(
                         fontSize: 20,
-                        color: Color(0xFFFF6F00), // warna orange
+                        color: Color(0xFFFF6F00), 
                       ),
                     ),
                     const SizedBox(height: 16),

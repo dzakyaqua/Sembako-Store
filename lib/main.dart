@@ -22,9 +22,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: AuthChecker(),
         routes: {
-      '/cart': (context) => const CartPage(), // kita buat halaman ini setelah ini
+      '/cart': (context) => const CartPage(), 
       '/home': (context) => const HomePage(),
       '/login': (context) => const LoginScreen(),
+      
       },
     );
   }

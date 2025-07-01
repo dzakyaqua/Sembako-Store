@@ -60,7 +60,7 @@ class CheckoutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const CustomDrawer(),
-      appBar: const MyNavbar(title: 'Sembako Store'), // Sidebar
+      appBar: const MyNavbar(title: 'Sembako Store'), 
       body: Padding(
   padding: const EdgeInsets.all(24),
   child: Column(

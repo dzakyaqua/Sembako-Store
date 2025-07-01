@@ -30,199 +30,191 @@ class HomePage extends StatelessWidget {
           }).toList();
 
           return GridView.builder(
-            padding: const EdgeInsets.all(16),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 16,
-              crossAxisSpacing: 16,
-              childAspectRatio: 0.75,
-            ),
-            itemCount: produks.length,
-            itemBuilder: (context, index) {
-              final produk = produks[index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProductDetailPage(product: produk),
-                    ),
-                  );
-                },
-                child: Card(
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    // border: Border(top: BorderSide(color: Colors.deepOrange, width: 5)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.orange.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 6),
-                      )
-                    ],
+          padding: const EdgeInsets.all(12),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
+            childAspectRatio: 0.70, // lebih ramping agar tidak overflow
+          ),
+          itemCount: produks.length,
+          itemBuilder: (context, index) {
+            final produk = produks[index];
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProductDetailPage(product: produk),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
+                );
+              },
+              child: Card(
+                elevation: 3,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Gambar Produk
+                    Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(16),
+                            topRight: Radius.circular(16),
+                          ),
+                          child: Image.network(
+                            produk.gambar,
+                            height: 110,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(Icons.broken_image, size: 40),
+                          ),
+                        ),
+                        // Badge Diskon
+                        Positioned(
+                          top: 8,
+                          left: 8,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: Colors.deepOrange,
+                              borderRadius: BorderRadius.circular(6),
                             ),
-                            child: Image.network(
-                              produk.gambar,
-                              height: 120,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.broken_image, size: 50),
+                            child: const Text(
+                              'Diskon 20%',
+                              style: TextStyle(color: Colors.white, fontSize: 10),
                             ),
                           ),
-                          Positioned(
-                            top: 10,
-                            left: 10,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: Colors.deepOrange,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: const Text(
-                                'Diskon 20%',
-                                style: TextStyle(color: Colors.white, fontSize: 12),
-                              ),
+                        ),
+                        // Icon Favorit
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
                             ),
+                            child: const Icon(Icons.favorite, size: 14, color: Colors.red),
                           ),
-                          Positioned(
-                            top: 10,
-                            right: 10,
-                            child: Container(
-                              padding: const EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 4,
-                                  )
-                                ],
-                              ),
-                              child: const Icon(Icons.favorite, color: Colors.red, size: 16),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(12),
+                        ),
+                      ],
+                    ),
+
+                    // Informasi Produk
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              produk.nama,
-                              style: const TextStyle(
-                                color: Colors.deepOrange,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              produk.deskripsi,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.black54,
-                              ),
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            Column(
                               children: [
                                 Text(
-                                  "Rp ${produk.harga}", // harga diskon
+                                  produk.nama,
                                   style: const TextStyle(
-                                    fontSize: 14,
                                     fontWeight: FontWeight.bold,
+                                    fontSize: 14,
                                     color: Colors.deepOrange,
                                   ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
                                 ),
-                                const SizedBox(width: 6),
+                                const SizedBox(height: 4),
                                 Text(
-                                  "Rp ${(produk.harga * 1.2).toStringAsFixed(0)}", // harga lama
+                                  produk.deskripsi,
                                   style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey,
-                                    decoration: TextDecoration.lineThrough,
+                                    fontSize: 11,
+                                    color: Colors.black54,
                                   ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 6),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Rp ${produk.harga}',
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        color: Colors.deepOrange,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      'Rp ${(produk.harga * 1.2).toStringAsFixed(0)}',
+                                      style: const TextStyle(
+                                        fontSize: 11,
+                                        color: Colors.grey,
+                                        decoration: TextDecoration.lineThrough,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 10),
+
+                            // Tombol Keranjang
                             ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.deepOrange,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                              onPressed: () async {
+                                final uid = FirebaseAuth.instance.currentUser?.uid;
+                                if (uid == null) return;
+
+                                final docRef = FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(uid)
+                                    .collection('cart')
+                                    .doc(produk.id);
+
+                                final snapshot = await docRef.get();
+
+                                if (snapshot.exists) {
+                                  await docRef.update({'jumlah': FieldValue.increment(1)});
+                                } else {
+                                  await docRef.set({
+                                    'nama': produk.nama,
+                                    'harga': produk.harga,
+                                    'gambar': produk.gambar,
+                                    'jumlah': 1,
+                                  });
+                                }
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('${produk.nama} ditambahkan ke keranjang')),
+                                );
+                              },
+                              icon: const Icon(Icons.shopping_cart, size: 16, color: Colors.white),
+                              label: const Text(
+                                'Tambah',
+                                style: TextStyle(fontSize: 12, color: Colors.white),
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.deepOrange,
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                minimumSize: const Size(double.infinity, 36),
+                              ),
                             ),
-                            onPressed: () async {
-                        final uid = FirebaseAuth.instance.currentUser?.uid;
-                        if (uid == null) return;
-
-                        final docRef = FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(uid)
-                            .collection('cart')
-                            .doc(produk.id);
-
-                        final snapshot = await docRef.get();
-
-                        if (snapshot.exists) {
-                          await docRef.update({'jumlah': FieldValue.increment(1)});
-                        } else {
-                          await docRef.set({
-                            'nama': produk.nama,
-                            'harga': produk.harga,
-                            'gambar': produk.gambar,
-                            'jumlah': 1,
-                          });
-                        }
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('${produk.nama} ditambahkan ke keranjang')),
-                        );
-                      },
-                            icon: const Icon(
-                              Icons.shopping_cart,
-                              color: Colors.white,
-                            ),
-                            label: const Text(
-                              "Tambah ke Keranjang",
-                              style: TextStyle(fontSize: 12, color: Colors.white),
-                            ),
-                          ),
-
                           ],
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
-                ),
-
-              );
-            },
-          );
+              ),
+            );
+          },
+        );
         },
       ),
     );

@@ -40,7 +40,7 @@ class MyNavbar extends StatelessWidget implements PreferredSizeWidget {
             return Stack(
               children: [
                 IconButton(
-                  iconSize: 30, // ✅ Keranjang lebih besar dari default (24)
+                  iconSize: 30, 
                   icon: const Icon(Icons.shopping_cart, color: Colors.deepOrange),
                   onPressed: () {
                     Navigator.pushNamed(context, '/cart');

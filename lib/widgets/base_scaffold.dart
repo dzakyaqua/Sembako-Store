@@ -54,6 +54,7 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pushReplacementNamed(context, '/login');
             },
           ),
+          const SizedBox(height: 20),
         ],
       ),
     );
